@@ -49,6 +49,16 @@ signinForm.addEventListener('submit', (e) => {
         })
 })
 
+const logout = document.querySelector('#logout')
+
+logout.addEventListener('click', (e) => {
+    e.preventDefault()
+    auth.signOut().then(_ => {
+        console.log('signout')
+    })
+})
+
+
 auth.onAuthStateChanged(async(user) => {
 
     const data = document.querySelector('#data-user')
@@ -121,28 +131,16 @@ const insertDataUser = async(user) => {
     return rta
 }
 
-const changeMenu = (user) => {
-    let navbar = document.querySelector('#menu-list')
-    if (user) {
-        navbar.innerHTML = `<li class="nav-item">
-                                <a class="nav-link" href="#" id="logout">LogOut</a>
-                            </li>`
-        const logout = document.querySelector('#logout')
+const loggedOutLinks = document.querySelectorAll('.logged-out')
+const loggedInLinks = document.querySelectorAll('.logged-in')
 
-        if (logout) {
-            logout.addEventListener('click', (e) => {
-                e.preventDefault()
-                auth.signOut().then(_ => {
-                    console.log('signout')
-                })
-            })
-        }
+const changeMenu = (user) => {
+
+    if (user) {
+        loggedInLinks.forEach(link => link.style.display = 'block')
+        loggedOutLinks.forEach(link => link.style.display = 'none')
     } else {
-        navbar.innerHTML = `<li class="nav-item">
-                                <a class="nav-link" href="#" data-toggle="modal" data-target="#signup-modal">Sign up</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#" data-toggle="modal" data-target="#login-modal">Sign in</a>
-                            </li>`
+        loggedInLinks.forEach(link => link.style.display = 'none')
+        loggedOutLinks.forEach(link => link.style.display = 'block')
     }
 }
